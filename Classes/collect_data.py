@@ -1,5 +1,7 @@
 import sys
 import requests
+from Classes.constants import CATEGORY,CATEGORY_URL
+from Classes.sql import Sql
 
 class CollectData:
     """
@@ -7,11 +9,9 @@ class CollectData:
     to insert data into sql db
     """
 
-    def __init__(self, base_url):  # url is 'https://fr.openfoodfacts.org/categories/'
-        self.base_url = str(base_url)
-        self.url = None
-        self.products_list = []
-        self.category_number = None
+    def __init__(self):  # url is 'https://fr.openfoodfacts.org/categories/'
+        print("Vous etes ici")
+        self.database = Sql()
 
     def create_url(self, category):
         """
@@ -22,4 +22,6 @@ class CollectData:
         print("Url {} is created".format(self.url))
         return category  # return to put him in parameter of function create_database
 
-
+    def create_categories(self):
+        for category in CATEGORY:
+            self.database.create_new_category(category)
