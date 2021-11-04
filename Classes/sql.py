@@ -1,6 +1,7 @@
 import mysql.connector
 from Classes.constants import CREDENTIALS
 
+
 class Sql:
     """
     This class manages all interactions with db sql
@@ -21,23 +22,28 @@ class Sql:
         query = "INSERT INTO Categories(nom) VALUES (%s)"
         self.mycursor.execute(query, (name,))
         self.mydb.commit()
+        return self.mycursor.lastrowid
+
+    def create_new_product(self, name, grade, id_category):
+        query = "INSERT INTO Products(nom, grade, id_categories) VALUES (%s, %s, %s)"
+        self.mycursor.execute(query, (name, grade, id_category,))
+        self.mydb.commit()
 
 
     def reset_database(self):
-
         # Reset Database + Création Database (pour reboot) #
 
         self.mycursor.execute("DROP DATABASE IF exists mydatabase")
         self.mycursor.execute("CREATE DATABASE IF NOT exists mydatabase")
         self.mycursor.execute("USE mydatabase")
         # Création des deux tables  #
-        self.mycursor.execute("CREATE TABLE IF NOT exists Categories(id_categories INT PRIMARY KEY NOT NULL AUTO_INCREMENT"
-                         ", nom VARCHAR(40))")
-        self.mycursor.execute("CREATE TABLE IF NOT exists Produits("
-                         "product_id VARCHAR(40),"
-                         " url VARCHAR(40),"
-                         "nom VARCHAR(255) NOT NULL, "
-                         "grade ENUM('A','B','C','D','E') NOT NULL,"
-                         "categorie INT, magasin VARCHAR(40), image VARCHAR(40),"
-                         "PRIMARY KEY (product_id))")
-
+        self.mycursor.execute(
+            "CREATE TABLE IF NOT exists Categories(id_categories INT PRIMARY KEY NOT NULL AUTO_INCREMENT"
+            ", nom VARCHAR(40))")
+        self.mycursor.execute(
+            "CREATE TABLE IF NOT exists Products(product_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+            "nom VARCHAR(255) NOT NULL, "
+            "grade ENUM('a', 'b', 'c', 'd', 'e', 'X') NOT NULL,"
+            "id_categories INT,"
+            "FOREIGN KEY (id_categories) REFERENCES Categories(id_categories))"
+        )

@@ -24,4 +24,13 @@ class CollectData:
 
     def create_categories(self):
         for category in CATEGORY:
-            self.database.create_new_category(category)
+            id = self.database.create_new_category(category)
+            self.create_products(category, id)
+
+    def create_products(self, category_name, category_id):
+        category_url = CATEGORY_URL + category_name + ".json"
+        request = requests.get(category_url)
+        data = request.json()
+        for product in data["products"]:
+            print(product["product_name"])
+            self.database.create_new_product(product["product_name"], product.get("nutriscore_grade","X"), category_id)

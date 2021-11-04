@@ -1,4 +1,4 @@
-CATEGORY_URL = "https://fr.openfoodfacts.org/categories/"
+CATEGORY_URL = "https://fr.openfoodfacts.org/category/"
 
 CATEGORY = [
     'pizzas',
