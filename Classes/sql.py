@@ -24,9 +24,9 @@ class Sql:
         self.mydb.commit()
         return self.mycursor.lastrowid
 
-    def create_new_product(self, name, grade, id_category):
-        query = "INSERT INTO Products(nom, grade, id_categories) VALUES (%s, %s, %s)"
-        self.mycursor.execute(query, (name, grade, id_category,))
+    def create_new_product(self, name, grade, url, stores, id_category):
+        query = "INSERT INTO Products(nom, grade, url, stores, id_categories) VALUES (%s, %s, %s, %s, %s)"
+        self.mycursor.execute(query, (name, grade, url, stores, id_category,))
         self.mydb.commit()
 
 
@@ -38,12 +38,19 @@ class Sql:
         self.mycursor.execute("USE mydatabase")
         # Création des deux tables  #
         self.mycursor.execute(
-            "CREATE TABLE IF NOT exists Categories(id_categories INT PRIMARY KEY NOT NULL AUTO_INCREMENT"
-            ", nom VARCHAR(40))")
+            "CREATE TABLE IF NOT exists Categories(id_categories INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+            "nom VARCHAR(40))")
         self.mycursor.execute(
-            "CREATE TABLE IF NOT exists Products(product_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+            "CREATE TABLE IF NOT exists Products(id_product INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
             "nom VARCHAR(255) NOT NULL, "
             "grade ENUM('a', 'b', 'c', 'd', 'e', 'X') NOT NULL,"
+            "url VARCHAR(255),"
+            "stores VARCHAR(255),"
             "id_categories INT,"
-            "FOREIGN KEY (id_categories) REFERENCES Categories(id_categories))"
-        )
+            "FOREIGN KEY (id_categories) REFERENCES Categories(id_categories))")
+        self.mycursor.execute(
+            "CREATE TABLE IF NOT exists Substitute(id_substitute INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+            "id_product INT NOT NULL,"
+            "id_substitute_product INT NOT NULL,"
+            "FOREIGN KEY (id_product) REFERENCES Products(id_product),"
+            "FOREIGN KEY (id_substitute_product) REFERENCES Products(id_product))")

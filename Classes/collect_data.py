@@ -33,4 +33,8 @@ class CollectData:
         data = request.json()
         for product in data["products"]:
             print(product["product_name"])
-            self.database.create_new_product(product["product_name"], product.get("nutriscore_grade","X"), category_id)
+            self.database.create_new_product(product["product_name"],
+                                             product.get("nutriscore_grade","X"),
+                                             product["url"],
+                                             product.get("stores", ""),
+                                             category_id)
