@@ -2,6 +2,7 @@ import sys
 import requests
 from Classes.constants import CATEGORY,CATEGORY_URL
 from Classes.sql import Sql
+from Classes.menu import Menu
 
 class CollectData:
     """
@@ -12,15 +13,7 @@ class CollectData:
     def __init__(self):  # url is 'https://fr.openfoodfacts.org/categories/'
         print("Vous etes ici")
         self.database = Sql()
-
-    def create_url(self, category):
-        """
-        create new url to parse with category in paramter
-        """
-        print("generate url")
-        self.url = self.base_url + str(category)
-        print("Url {} is created".format(self.url))
-        return category  # return to put him in parameter of function create_database
+        self.menu = Menu()
 
     def create_categories(self):
         for category in CATEGORY:
@@ -32,9 +25,24 @@ class CollectData:
         request = requests.get(category_url)
         data = request.json()
         for product in data["products"]:
-            print(product["product_name"])
             self.database.create_new_product(product["product_name"],
                                              product.get("nutriscore_grade","X"),
                                              product["url"],
                                              product.get("stores", ""),
                                              category_id)
+
+    def suggest_better_product(self, id_category, grade, name):
+        if grade != "a":
+            suggestions = self.database.suggest(id_category,)
+            if len(suggestions) == 0:
+                self.database.suggest_all_categories()
+        else:
+            print(name, " possède déjà le grade 'a'")
+
+    def display_menu1(self):
+        choice = self.menu.menu1()
+        if choice == 1:
+            self.display_menu_application()
+
+    def display_menu_application(self):
+        choice = self.menu.menu_application()

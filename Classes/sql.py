@@ -15,10 +15,9 @@ class Sql:
             database=CREDENTIALS["dbname"]
         )
         self.mycursor = self.mydb.cursor()
-        self.reset_database()
+        """self.reset_database()"""
 
     def create_new_category(self, name):
-        print("creating new category ", name)
         query = "INSERT INTO Categories(nom) VALUES (%s)"
         self.mycursor.execute(query, (name,))
         self.mydb.commit()
@@ -28,6 +27,22 @@ class Sql:
         query = "INSERT INTO Products(nom, grade, url, stores, id_categories) VALUES (%s, %s, %s, %s, %s)"
         self.mycursor.execute(query, (name, grade, url, stores, id_category,))
         self.mydb.commit()
+
+    def create_new_substitute(self, id_product, id_substitute_product):
+        query = "INSERT INTO Substitute(id_product, id_substitute_product) VALUES (%s, %s)"
+        self.mycursor.execute(query, (id_product, id_substitute_product,))
+        self.mydb.commit()
+
+    def suggest(self, id_categories):
+        query = "SELECT * FROM products WHERE grade = 'a' AND id_categories = %s "
+        self.mycursor.execute(query, (id_categories,))
+        return self.mycursor.fetchall()
+
+    def suggest_all_categories(self):
+        query = "SELECT * FROM products WHERE grade = 'a'"
+        self.mycursor.execute(query)
+        return self.mycursor.fetchall()
+
 
 
     def reset_database(self):
