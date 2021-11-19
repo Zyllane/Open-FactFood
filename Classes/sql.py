@@ -36,14 +36,22 @@ class Sql:
     def suggest(self, id_categories):
         query = "SELECT * FROM products WHERE grade = 'a' AND id_categories = %s "
         self.mycursor.execute(query, (id_categories,))
-        return self.mycursor.fetchall()
+        return self.mycursor.fetchone()
 
     def suggest_all_categories(self):
         query = "SELECT * FROM products WHERE grade = 'a'"
         self.mycursor.execute(query)
+        return self.mycursor.fetchone()
+
+    def get_categories(self):
+        query = "SELECT * FROM categories"
+        self.mycursor.execute(query)
         return self.mycursor.fetchall()
 
-
+    def get_products_by_cat(self, id_categories):
+        query = "SELECT * FROM products WHERE id_categories = %s"
+        self.mycursor.execute(query, (id_categories,))
+        return self.mycursor.fetchall()
 
     def reset_database(self):
         # Reset Database + Création Database (pour reboot) #
