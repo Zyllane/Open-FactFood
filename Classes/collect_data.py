@@ -58,6 +58,10 @@ class CollectData:
         choice = self.menu.menu_application()
         if choice == 1:
             self.display_menu_categories()
+        elif choice == 2:
+            self.display_menu_favorites()
+        elif choice == 3:
+            print('Vous quitter l\'application')
 
     def display_menu_categories(self):
         categories = self.database.get_categories()
@@ -67,8 +71,22 @@ class CollectData:
     def display_menu_products(self, id_categories):
         products = self.database.get_products_by_cat(id_categories)
         choice = self.menu.menu_products(products)
-        self.display_menu_suggest(id_categories)
+        self.display_menu_suggest(id_categories, choice)
 
-    def display_menu_suggest(self, id_categories):
+    def display_menu_suggest(self, id_categories, id_product):
         suggest = self.database.suggest(id_categories)
         choice = self.menu.menu_suggest(suggest)
+        self.database.create_new_substitute(id_product, choice)
+
+    def display_menu_favorites(self):
+        substitute = self.database.get_all_substitute()
+        favorites = []
+        for sub in substitute:
+            sub_name = self.database.get_product_name_by_id(sub[2])
+            product_name = self.database.get_product_name_by_id(sub[1])
+            tmp = {
+                "sub_name": sub_name,
+                "product_name": product_name
+            }
+            favorites.append(tmp)
+        self.menu.menu_favorites(favorites)

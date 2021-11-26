@@ -42,7 +42,9 @@ class Menu:
         print("-----------------------------------------")
         choice = int(input())
         return choice
+
     def menu_favorites(self, favorites):
         print("-----------------------------------------")
-
+        for fav in favorites:
+            print(fav["product_name"], 'a été substitué par ', fav["sub_name"])
         print("-----------------------------------------")

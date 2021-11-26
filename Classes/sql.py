@@ -14,7 +14,7 @@ class Sql:
             passwd=CREDENTIALS["password"],
             database=CREDENTIALS["dbname"]
         )
-        self.mycursor = self.mydb.cursor()
+        self.mycursor = self.mydb.cursor(buffered=True)
         """self.reset_database()"""
 
     def create_new_category(self, name):
@@ -37,6 +37,16 @@ class Sql:
         query = "SELECT * FROM products WHERE grade = 'a' AND id_categories = %s "
         self.mycursor.execute(query, (id_categories,))
         return self.mycursor.fetchone()
+
+    def get_product_name_by_id(self,id_product):
+        query = "SELECT nom FROM products WHERE id_product = %s"
+        self.mycursor.execute(query, (id_product,))
+        return self.mycursor.fetchone()
+
+    def get_all_substitute(self):
+        query = "SELECT * FROM substitute "
+        self.mycursor.execute(query)
+        return self.mycursor.fetchall()
 
     def suggest_all_categories(self):
         query = "SELECT * FROM products WHERE grade = 'a'"
