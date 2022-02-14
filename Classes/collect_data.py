@@ -1,4 +1,3 @@
-import sys
 import requests
 from Classes.constants import CATEGORY, CATEGORY_URL
 from Classes.sql import Sql
@@ -12,7 +11,6 @@ class CollectData:
     """
 
     def __init__(self):  # url is 'https://fr.openfoodfacts.org/categories/'
-        print("Vous etes ici")
         self.database = Sql()
         self.menu = Menu()
 
@@ -71,7 +69,14 @@ class CollectData:
     def display_menu_products(self, id_categories):
         products = self.database.get_products_by_cat(id_categories)
         choice = self.menu.menu_products(products)
-        self.display_menu_suggest(id_categories, choice)
+        found = False
+        for i in range(len(products)):
+            if products[i][2] == "a" and choice == products[i][0]:
+                print("Le produit sélectionné possède déjà un grade=a, pas besoin de suggestion")
+                found = True
+                break
+        if not found:
+            self.display_menu_suggest(id_categories, choice)
 
     def display_menu_suggest(self, id_categories, id_product):
         suggest = self.database.suggest(id_categories)
@@ -82,8 +87,8 @@ class CollectData:
         substitute = self.database.get_all_substitute()
         favorites = []
         for sub in substitute:
-            sub_name = self.database.get_product_name_by_id(sub[2])
-            product_name = self.database.get_product_name_by_id(sub[1])
+            sub_name = self.database.get_product_name_by_id(sub[2])[0]
+            product_name = self.database.get_product_name_by_id(sub[1])[0]
             tmp = {
                 "sub_name": sub_name,
                 "product_name": product_name

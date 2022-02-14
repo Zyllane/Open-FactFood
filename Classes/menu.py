@@ -39,6 +39,8 @@ class Menu:
     def menu_suggest(self, suggest):
         print("-----------------------------------------")
         print(suggest[0], '-', suggest[1], 'disponible dans le magasin: ', suggest[4], 'ou sur ', suggest[3])
+        print("Taper le numéro de produit pour le rajouter aux favoris")
+        print("Taper n'importe quelle autre touche pour quitter l'application")
         print("-----------------------------------------")
         choice = int(input())
         return choice

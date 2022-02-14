@@ -38,7 +38,7 @@ class Sql:
         self.mycursor.execute(query, (id_categories,))
         return self.mycursor.fetchone()
 
-    def get_product_name_by_id(self,id_product):
+    def get_product_name_by_id(self, id_product):
         query = "SELECT nom FROM products WHERE id_product = %s"
         self.mycursor.execute(query, (id_product,))
         return self.mycursor.fetchone()

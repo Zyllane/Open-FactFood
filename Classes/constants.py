@@ -19,7 +19,7 @@ CATEGORY = [
 
 ]
 
-#you have to put your credentials
+'#you have to put your credentials'
 CREDENTIALS = {
     'username': 'root',
     'password': 'ocp5',
