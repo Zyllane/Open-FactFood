@@ -11,15 +11,25 @@ class CollectData:
     """
 
     def __init__(self):  # url is 'https://fr.openfoodfacts.org/categories/'
+        """
+        Constructor of the class, which initialise the link with db and the user view (menu)
+        """
         self.database = Sql()
         self.menu = Menu()
 
     def create_categories(self):
+        """
+        Parse the constant CATEGORY in the constants file to create all categories described in
+        Call the create_products method to create the product associated to each category
+        """
         for category in CATEGORY:
             id = self.database.create_new_category(category)
             self.create_products(category, id)
 
     def create_products(self, category_name, category_id):
+        """
+        Call the Open Food Fact API to retrieve product information and create them in the db
+        """
         category_url = CATEGORY_URL + category_name + ".json"
         request = requests.get(category_url)
         data = request.json()
@@ -31,6 +41,11 @@ class CollectData:
                                              category_id)
 
     def suggest_better_product(self, id_category, grade, name):
+        """
+        Suggest a better product for a given product of the same category
+        If the first product already has a grade = "a",
+        then it will inform the user that there is no need to suggest another product
+        """
         if grade != "a":
             suggestions = self.database.suggest(id_category, )
             if len(suggestions) == 0:
@@ -39,6 +54,9 @@ class CollectData:
             print(name, " possède déjà le grade 'a'")
 
     def display_menu1(self):
+        """
+        Display the first menu in menu.py and allows the user to make choices
+        """
         choice = self.menu.menu1()
         if choice == 1:
             self.display_menu_application()
@@ -53,6 +71,9 @@ class CollectData:
             return 0
 
     def display_menu_application(self):
+        """
+        Display the application menu in menu.py and allows the user to make choices
+        """
         choice = self.menu.menu_application()
         if choice == 1:
             self.display_menu_categories()
@@ -62,11 +83,17 @@ class CollectData:
             print('Vous quitter l\'application')
 
     def display_menu_categories(self):
+        """
+        Display the menu categories in menu.py and allows the user to make choices
+        """
         categories = self.database.get_categories()
         choice = self.menu.menu_categories(categories)
         self.display_menu_products(choice)
 
     def display_menu_products(self, id_categories):
+        """
+        Display the product menu in menu.py and allows the user to make choices
+        """
         products = self.database.get_products_by_cat(id_categories)
         choice = self.menu.menu_products(products)
         found = False
@@ -79,11 +106,17 @@ class CollectData:
             self.display_menu_suggest(id_categories, choice)
 
     def display_menu_suggest(self, id_categories, id_product):
+        """
+        Display the menu suggest in menu.py and allows the user to make choices
+        """
         suggest = self.database.suggest(id_categories)
         choice = self.menu.menu_suggest(suggest)
         self.database.create_new_substitute(id_product, choice)
 
     def display_menu_favorites(self):
+        """
+        Display the menu favorites in menu.py and allows the user to make choices
+        """
         substitute = self.database.get_all_substitute()
         favorites = []
         for sub in substitute:
