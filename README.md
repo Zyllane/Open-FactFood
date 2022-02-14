@@ -193,31 +193,3 @@ Or choose a product category for which he will have to choose a particular produ
   
 
 Then he will be able to record or not the substitute of his choice
-
-  
-
-  
-
-  
-
-## Operations:
-
-  
-
-  
-
-**Folder classes:**
-
-  
-
-  
-
-- collect_data.py:
-
-  
-
-	- we pass him the url of openfoodfact
-
-  
-
-	- the first method
